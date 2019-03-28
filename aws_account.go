@@ -8,14 +8,35 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"time"
 )
 
+// AwsAccounts represents all AWS Accounts enabled in CloudHealth with their configurations.
+type AwsAccounts struct {
+	AwsAccounts []AwsAccount `json:"aws_accounts"`
+}
+
 // AwsAccount represents the configuration of an AWS Account enabled in CloudHealth.
 type AwsAccount struct {
-	ID             int                      `json:"id"`
-	Name           string                   `json:"name"`
-	Authentication AwsAccountAuthentication `json:"authentication"`
+	ID               int                      `json:"id"`
+	Name             string                   `json:"name"`
+	OwnerId          string                   `json:"owner_id,omitempty"`
+	HidePublicFields bool                     `json:"hide_public_fields,omitempty"`
+	Region           string                   `json:"region,omitempty"`
+	CreatedAt        time.Time                `json:"created_at,omitempty"`
+	UpdatedAt        time.Time                `json:"updated_at,omitempty"`
+	AccountType      string                   `json:"account_type,omitempty"`
+	VpcOnly          bool                     `json:"vpc_only,omitempty"`
+	ClusterName      string                   `json:"cluster_name,omitempty"`
+	Status           AwsAccountStatus         `json:"status,omitempty"`
+	Authentication   AwsAccountAuthentication `json:"authentication"`
+}
+
+// AwsAccountStatus represents the status details for AWS integration.
+type AwsAccountStatus struct {
+	Level      string    `json:"level"`
+	LastUpdate time.Time `json:"last_update,omitempty"`
 }
 
 // AwsAccountAuthentication represents the authentication details for AWS integration.
@@ -69,6 +90,62 @@ func (s *Client) GetAwsAccount(id int) (*AwsAccount, error) {
 	default:
 		return nil, fmt.Errorf("Unknown Response with CloudHealth: `%d`", resp.StatusCode)
 	}
+}
+
+// GetAwsAccounts gets all AWS Accounts enabled in CloudHealth.
+func (s *Client) GetAwsAccounts() (*AwsAccounts, error) {
+	awsaccounts := new(AwsAccounts)
+	err := iterateOverAwsAccountsPages(s, awsaccounts, 1)
+	if err != nil {
+		return nil, err
+	}
+	return awsaccounts, nil
+}
+
+// iterateOverAwsAccountsPages iterates over all pages returned by CloudHealth for listing enabled AWS accounts.
+func iterateOverAwsAccountsPages(s *Client, awsaccounts *AwsAccounts, page int) error {
+	params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"100"}, "api_key": {s.ApiKey}}
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/?%s", params.Encode()))
+	url := s.EndpointURL.ResolveReference(relativeURL)
+
+	req, err := http.NewRequest("GET", url.String(), nil)
+
+	client := &http.Client{
+		Timeout: time.Second * 15,
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	var pageofaccounts = new(AwsAccounts)
+	switch resp.StatusCode {
+	case http.StatusOK:
+		err = json.Unmarshal(responseBody, &pageofaccounts)
+		if err != nil {
+			return err
+		}
+	case http.StatusUnauthorized:
+		return ErrClientAuthenticationError
+	default:
+		return fmt.Errorf("Unknown Response with CloudHealth: `%d`", resp.StatusCode)
+	}
+
+	for _, a := range pageofaccounts.AwsAccounts {
+		awsaccounts.AwsAccounts = append(awsaccounts.AwsAccounts, a)
+	}
+
+	if len(pageofaccounts.AwsAccounts) < 100 {
+		return nil
+	}
+
+	return iterateOverAwsAccountsPages(s, awsaccounts, page+1)
 }
 
 // CreateAwsAccount enables a new AWS Account in CloudHealth.
