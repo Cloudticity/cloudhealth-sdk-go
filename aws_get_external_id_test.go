@@ -18,7 +18,7 @@ func TestGetAwsExternalIDOk(t *testing.T) {
 		if r.Method != "GET" {
 			t.Errorf("Expected ‘GET’ request, got ‘%s’", r.Method)
 		}
-		expectedURL := fmt.Sprintf("/aws_accounts/:id/generate_external_id")
+		expectedURL := fmt.Sprintf("/aws_accounts/%d/generate_external_id", defaultAWSAccount.ID)
 		if r.URL.EscapedPath() != expectedURL {
 			t.Errorf("Expected request to ‘%s’, got ‘%s’", expectedURL, r.URL.EscapedPath())
 		}
@@ -33,12 +33,12 @@ func TestGetAwsExternalIDOk(t *testing.T) {
 		return
 	}
 
-	returnedAwsExternalID, err := c.GetAwsExternalID()
+	returnedAwsExternalID, err := c.GetAwsExternalID(defaultAWSAccount.ID)
 	if err != nil {
 		t.Errorf("GetAwsExternalID() returned an error: %s", err)
 		return
 	}
-	if returnedAwsExternalID != defaultAwsExternalID.ExternalID {
+	if returnedAwsExternalID.ExternalID != defaultAwsExternalID.ExternalID {
 		t.Errorf("GetAwsExternalID() expected ID `%s`, got `%s`", defaultAwsExternalID.ExternalID, returnedAwsExternalID)
 		return
 	}

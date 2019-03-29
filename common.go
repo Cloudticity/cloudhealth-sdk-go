@@ -30,7 +30,7 @@ func getResponsePage(s *Client, relativeURL *url.URL) ([]byte, error) {
 	switch resp.StatusCode {
 	case http.StatusOK:
 		return responseBody, nil
-	case http.StatusUnauthorized:
+	case http.StatusForbidden:
 		return []byte{}, ErrClientAuthenticationError
 	case http.StatusNotFound:
 		return nil, ErrAwsAccountNotFound

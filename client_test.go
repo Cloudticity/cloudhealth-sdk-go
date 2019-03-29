@@ -13,7 +13,7 @@ func TestBadApiKey(t *testing.T) {
 		if r.Method != "GET" {
 			t.Errorf("Expected ‘GET’ request, got ‘%s’", r.Method)
 		}
-		expectedURL := fmt.Sprintf("/aws_accounts/:id/generate_external_id")
+		expectedURL := fmt.Sprintf("/aws_accounts/")
 		if r.URL.EscapedPath() != expectedURL {
 			t.Errorf("Expected request to ‘%s’, got ‘%s’", expectedURL, r.URL.EscapedPath())
 		}
@@ -26,9 +26,9 @@ func TestBadApiKey(t *testing.T) {
 		return
 	}
 
-	_, err = c.GetAwsExternalID()
+	_, err = c.GetAwsAccounts()
 	if err != ErrClientAuthenticationError {
-		t.Errorf("GetAwsExternalID() returned the wrong error: %s", err)
+		t.Errorf("GetAwsAccounts() returned the wrong error: %s", err)
 		return
 	}
 }

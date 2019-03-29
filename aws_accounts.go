@@ -21,7 +21,7 @@ type AwsAccounts struct {
 type AwsAccount struct {
 	ID               int                      `json:"id"`
 	Name             string                   `json:"name"`
-	OwnerId          string                   `json:"owner_id,omitempty"`
+	OwnerID          string                   `json:"owner_id,omitempty"`
 	HidePublicFields bool                     `json:"hide_public_fields,omitempty"`
 	Region           string                   `json:"region,omitempty"`
 	CreatedAt        time.Time                `json:"created_at,omitempty"`
@@ -52,8 +52,13 @@ type AwsAccountAuthentication struct {
 // It's useful for ignoring errors (e.g. delete if exists).
 var ErrAwsAccountNotFound = errors.New("AWS Account not found")
 
-// GetAwsAccount gets the AWS Account with the specified CloudHealth Account ID.
+// GetAwsAccount gets the AWS Account with the specified CloudHealth Account ID. (deprecated, will be removed in future)
 func (s *Client) GetAwsAccount(id int) (*AwsAccount, error) {
+	return s.GetSingleAwsAccount(id)
+}
+
+// GetSingleAwsAccount gets the AWS Account with the specified CloudHealth Account ID.
+func (s *Client) GetSingleAwsAccount(id int) (*AwsAccount, error) {
 	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", id, s.ApiKey))
 
 	responseBody, err := getResponsePage(s, relativeURL)
