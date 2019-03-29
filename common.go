@@ -14,7 +14,7 @@ func getResponsePage(s *Client, relativeURL *url.URL) ([]byte, error) {
 	req, err := http.NewRequest("GET", url.String(), nil)
 
 	client := &http.Client{
-		Timeout: time.Second * 15,
+		Timeout: time.Second * 20,
 	}
 	resp, err := client.Do(req)
 	if err != nil {

@@ -21,31 +21,31 @@ type AwsAccounts struct {
 type AwsAccount struct {
 	ID               int                      `json:"id"`
 	Name             string                   `json:"name"`
-	OwnerID          string                   `json:"owner_id,omitempty"`
-	HidePublicFields bool                     `json:"hide_public_fields,omitempty"`
-	Region           string                   `json:"region,omitempty"`
-	CreatedAt        time.Time                `json:"created_at,omitempty"`
-	UpdatedAt        time.Time                `json:"updated_at,omitempty"`
-	AccountType      string                   `json:"account_type,omitempty"`
-	VpcOnly          bool                     `json:"vpc_only,omitempty"`
-	ClusterName      string                   `json:"cluster_name,omitempty"`
-	Status           AwsAccountStatus         `json:"status,omitempty"`
+	OwnerID          string                   `json:"owner_id"`
+	HidePublicFields bool                     `json:"hide_public_fields"`
+	Region           string                   `json:"region"`
+	CreatedAt        time.Time                `json:"created_at"`
+	UpdatedAt        time.Time                `json:"updated_at"`
+	AccountType      string                   `json:"account_type"`
+	VpcOnly          bool                     `json:"vpc_only"`
+	ClusterName      string                   `json:"cluster_name"`
+	Status           AwsAccountStatus         `json:"status"`
 	Authentication   AwsAccountAuthentication `json:"authentication"`
 }
 
 // AwsAccountStatus represents the status details for AWS integration.
 type AwsAccountStatus struct {
 	Level      string    `json:"level"`
-	LastUpdate time.Time `json:"last_update,omitempty"`
+	LastUpdate time.Time `json:"last_update"`
 }
 
 // AwsAccountAuthentication represents the authentication details for AWS integration.
 type AwsAccountAuthentication struct {
 	Protocol             string `json:"protocol"`
-	AccessKey            string `json:"access_key,omitempty"`
-	SecreyKey            string `json:"secret_key,omitempty"`
-	AssumeRoleArn        string `json:"assume_role_arn,omitempty"`
-	AssumeRoleExternalID string `json:"assume_role_external_id,omitempty"`
+	AccessKey            string `json:"access_key"`
+	SecreyKey            string `json:"secret_key"`
+	AssumeRoleArn        string `json:"assume_role_arn"`
+	AssumeRoleExternalID string `json:"assume_role_external_id"`
 }
 
 // AwsExternalID is used to enable integration with AWS via IAM Roles.
@@ -91,15 +91,15 @@ func (s *Client) GetAwsAccounts() (*AwsAccounts, error) {
 		if err != nil {
 			return nil, err
 		}
-		var accounts = new(AwsAccounts)
-		err = json.Unmarshal(responseBody, &accounts)
+		var acts = new(AwsAccounts)
+		err = json.Unmarshal(responseBody, &acts)
 		if err != nil {
 			return nil, err
 		}
-		for _, p := range accounts.AwsAccounts {
+		for _, p := range acts.AwsAccounts {
 			awsaccounts.AwsAccounts = append(awsaccounts.AwsAccounts, p)
 		}
-		if len(accounts.AwsAccounts) < 100 {
+		if len(acts.AwsAccounts) < 100 {
 			break
 		}
 		page++
