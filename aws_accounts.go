@@ -48,11 +48,16 @@ type AwsAccountAuthentication struct {
 	AssumeRoleExternalID string `json:"assume_role_external_id,omitempty"`
 }
 
+// AwsExternalID is used to enable integration with AWS via IAM Roles.
+type AwsExternalID struct {
+	ExternalID string `json:"generated_external_id"`
+}
+
 // ErrAwsAccountNotFound is returned when an AWS Account doesn't exist on a Read or Delete.
 // It's useful for ignoring errors (e.g. delete if exists).
 var ErrAwsAccountNotFound = errors.New("AWS Account not found")
 
-// GetAwsAccount gets the AWS Account with the specified CloudHealth Account ID. (deprecated, will be removed in future)
+// GetAwsAccount gets the AWS Account with the specified CloudHealth Account ID. (deprecated, will be removed in future, kept only to not break anything)
 func (s *Client) GetAwsAccount(id int) (*AwsAccount, error) {
 	return s.GetSingleAwsAccount(id)
 }
@@ -217,4 +222,22 @@ func (s *Client) DeleteAwsAccount(id int) error {
 	default:
 		return fmt.Errorf("Unknown Response with CloudHealth: `%d`", resp.StatusCode)
 	}
+}
+
+// GetAwsExternalID gets the AWS External ID tied to the CloudHealth Account.
+func (s *Client) GetAwsExternalID(id int) (*AwsExternalID, error) {
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d/generate_external_id?api_key=%s", id, s.ApiKey))
+
+	responseBody, err := getResponsePage(s, relativeURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var extid = new(AwsExternalID)
+	err = json.Unmarshal(responseBody, &extid)
+	if err != nil {
+		return nil, err
+	}
+
+	return extid, nil
 }
