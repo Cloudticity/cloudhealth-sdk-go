@@ -100,3 +100,45 @@ func (s *Client) GetCustomers() (*Customers, error) {
 	}
 	return customers, nil
 }
+
+// CreateCustomer creates a new Customer in CloudHealth.
+func (s *Client) CreateCustomer(customer Customer) (*Customer, error) {
+	relativeURL, _ := url.Parse(fmt.Sprintf("customers?api_key=%s", s.ApiKey))
+
+	responseBody, err := createResource(s, relativeURL, customer)
+	if err != nil {
+		if err == ErrUnprocessableEntityError {
+			return nil, ErrAwsAccountCreationError
+		}
+		return nil, err
+	}
+
+	var returnedCustomer = new(Customer)
+	err = json.Unmarshal(responseBody, &returnedCustomer)
+	if err != nil {
+		return nil, err
+	}
+
+	return returnedCustomer, nil
+}
+
+// UpdateCustomer updates an existing Customer in CloudHealth.
+func (s *Client) UpdateCustomer(customer Customer) (*Customer, error) {
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", customer.ID, s.ApiKey))
+
+	responseBody, err := updateResource(s, relativeURL, customer)
+	if err != nil {
+		if err == ErrUnprocessableEntityError {
+			return nil, ErrAwsAccountCreationError
+		}
+		return nil, err
+	}
+
+	var returnedcustomer = new(Customer)
+	err = json.Unmarshal(responseBody, &returnedcustomer)
+	if err != nil {
+		return nil, err
+	}
+
+	return returnedcustomer, nil
+}

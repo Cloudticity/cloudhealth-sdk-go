@@ -15,6 +15,9 @@ type Client struct {
 // ErrClientAuthenticationError is returned for authentication errors with the API.
 var ErrClientAuthenticationError = errors.New("Authentication Error with CloudHealth")
 
+// ErrUnprocessableEntityError is returned for resource creation errors.
+var ErrUnprocessableEntityError = errors.New("Bad Request. Please check if a resource with same name already exists")
+
 // NewClient returns a new cloudhealth.Client for accessing the CloudHealth API.
 func NewClient(apiKey string, defaultEndpointURL string) (*Client, error) {
 	s := &Client{
