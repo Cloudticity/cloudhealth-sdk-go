@@ -27,7 +27,7 @@ var defaultAWSAccounts = AwsAccounts{
 	},
 }
 
-func TestGetAwsAccountsOK(t *testing.T) {
+func TestGetAwsAccounts(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		if r.Method != "GET" {
@@ -54,7 +54,7 @@ func TestGetAwsAccountsOK(t *testing.T) {
 		return
 	}
 	if len(returnedAwsAccounts.AwsAccounts) != 2 {
-		t.Errorf("All accounts have not be retrieved")
+		t.Errorf("All accounts have not been retrieved")
 		return
 	}
 	if returnedAwsAccounts.AwsAccounts[0].ID != defaultAWSAccounts.AwsAccounts[0].ID && returnedAwsAccounts.AwsAccounts[0].ID != defaultAWSAccounts.AwsAccounts[1].ID {
@@ -64,7 +64,7 @@ func TestGetAwsAccountsOK(t *testing.T) {
 	return
 }
 
-func TestGetSingleAwsAccountOK(t *testing.T) {
+func TestGetSingleAwsAccount(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		if r.Method != "GET" {
@@ -122,7 +122,7 @@ func TestGetSingleAwsAccountDoesntExist(t *testing.T) {
 	}
 }
 
-func TestCreateAwsAccountOk(t *testing.T) {
+func TestCreateAwsAccount(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusCreated)
 		if r.Method != "POST" {
@@ -206,7 +206,7 @@ func TestUpdateAwsAccountAlreadyExists(t *testing.T) {
 	}
 }
 
-func TestUpdateAwsAccountOK(t *testing.T) {
+func TestUpdateAwsAccount(t *testing.T) {
 	updatedAwsAccount := defaultAWSAccount
 	updatedAwsAccount.Name = "Updated"
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -274,7 +274,7 @@ func TestUpdateAwsAccountNameConflict(t *testing.T) {
 	}
 }
 
-func TestDeleteAwsAccountOK(t *testing.T) {
+func TestDeleteAwsAccount(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		if r.Method != "DELETE" {
@@ -330,7 +330,7 @@ var defaultAwsExternalID = AwsExternalID{
 	ExternalID: "1234567890",
 }
 
-func TestGetAwsExternalIDOk(t *testing.T) {
+func TestGetAwsExternalID(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		if r.Method != "GET" {

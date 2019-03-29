@@ -2,6 +2,7 @@ package cloudhealth
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/url"
 	"strconv"
@@ -48,12 +49,19 @@ type CustomerAddress struct {
 	Country string `json:"country"`
 }
 
+// ErrCustomerNotFound is returned when a Customer doesn't exist on a Read or Delete.
+// It's useful for ignoring errors (e.g. delete if exists).
+var ErrCustomerNotFound = errors.New("Customer not found")
+
 // GetSingleCustomer gets the Customer with the specified CloudHealth Customer ID.
 func (s *Client) GetSingleCustomer(id int) (*Customer, error) {
 	relativeURL, _ := url.Parse(fmt.Sprintf("customers/%d?api_key=%s", id, s.ApiKey))
 
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
+		if err == ErrNotFound {
+			return nil, ErrCustomerNotFound
+		}
 		return nil, err
 	}
 

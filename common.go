@@ -1,12 +1,17 @@
 package cloudhealth
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"time"
 )
+
+// ErrNotFound is returned when a Resource doesn't exist on a Read or Delete.
+// It's useful for ignoring errors (e.g. delete if exists).
+var ErrNotFound = errors.New("Resource not found")
 
 // getResponsePage returns a response page of a CloudHealth's endpoint.
 func getResponsePage(s *Client, relativeURL *url.URL) ([]byte, error) {
@@ -33,7 +38,7 @@ func getResponsePage(s *Client, relativeURL *url.URL) ([]byte, error) {
 	case http.StatusForbidden:
 		return []byte{}, ErrClientAuthenticationError
 	case http.StatusNotFound:
-		return nil, ErrAwsAccountNotFound
+		return nil, ErrNotFound
 	default:
 		return []byte{}, fmt.Errorf("Unknown Response with CloudHealth: `%d`", resp.StatusCode)
 	}

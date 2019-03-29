@@ -68,6 +68,9 @@ func (s *Client) GetSingleAwsAccount(id int) (*AwsAccount, error) {
 
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
+		if err == ErrNotFound {
+			return nil, ErrAwsAccountNotFound
+		}
 		return nil, err
 	}
 
@@ -186,6 +189,8 @@ func (s *Client) UpdateAwsAccount(account AwsAccount) (*AwsAccount, error) {
 		return account, nil
 	case http.StatusUnauthorized:
 		return nil, ErrClientAuthenticationError
+	case http.StatusNotFound:
+		return nil, ErrAwsAccountNotFound
 	case http.StatusUnprocessableEntity:
 		return nil, fmt.Errorf("Bad Request. Please check if a AWS Account with this name `%s` already exists", account.Name)
 	default:
