@@ -55,7 +55,7 @@ var ErrCustomerNotFound = errors.New("Customer not found")
 
 // GetSingleCustomer gets the Customer with the specified CloudHealth Customer ID.
 func (s *Client) GetSingleCustomer(id int) (*Customer, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("customers/%d?api_key=%s", id, s.ApiKey))
+	relativeURL, _ := url.Parse(fmt.Sprintf("customers/%d?api_key=%s", id, s.APIKey))
 
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
@@ -74,12 +74,12 @@ func (s *Client) GetSingleCustomer(id int) (*Customer, error) {
 	return customer, nil
 }
 
-// GetAwsAccounts gets all AWS Accounts enabled in CloudHealth.
+// GetCustomers gets all AWS Accounts enabled in CloudHealth.
 func (s *Client) GetCustomers() (*Customers, error) {
 	customers := new(Customers)
 	page := 1
 	for {
-		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"50"}, "api_key": {s.ApiKey}}
+		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"50"}, "api_key": {s.APIKey}}
 		relativeURL, _ := url.Parse(fmt.Sprintf("customers/?%s", params.Encode()))
 		responseBody, err := getResponsePage(s, relativeURL)
 		if err != nil {
@@ -103,7 +103,7 @@ func (s *Client) GetCustomers() (*Customers, error) {
 
 // CreateCustomer creates a new Customer in CloudHealth.
 func (s *Client) CreateCustomer(customer Customer) (*Customer, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("customers?api_key=%s", s.ApiKey))
+	relativeURL, _ := url.Parse(fmt.Sprintf("customers?api_key=%s", s.APIKey))
 
 	responseBody, err := createResource(s, relativeURL, customer)
 	if err != nil {
@@ -121,7 +121,7 @@ func (s *Client) CreateCustomer(customer Customer) (*Customer, error) {
 
 // UpdateCustomer updates an existing Customer in CloudHealth.
 func (s *Client) UpdateCustomer(customer Customer) (*Customer, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", customer.ID, s.ApiKey))
+	relativeURL, _ := url.Parse(fmt.Sprintf("customers/%d?api_key=%s", customer.ID, s.APIKey))
 
 	responseBody, err := updateResource(s, relativeURL, customer)
 	if err != nil {
@@ -135,4 +135,15 @@ func (s *Client) UpdateCustomer(customer Customer) (*Customer, error) {
 	}
 
 	return returnedcustomer, nil
+}
+
+// DeleteCustomer removes the Customer with the specified CloudHealth ID.
+func (s *Client) DeleteCustomer(id int) error {
+	relativeURL, _ := url.Parse(fmt.Sprintf("customers/%d?api_key=%s", id, s.APIKey))
+	_, err := deleteResource(s, relativeURL)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

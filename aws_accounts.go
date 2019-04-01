@@ -56,7 +56,7 @@ func (s *Client) GetAwsAccount(id int) (*AwsAccount, error) {
 
 // GetSingleAwsAccount gets the AWS Account with the specified CloudHealth Account ID.
 func (s *Client) GetSingleAwsAccount(id int) (*AwsAccount, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", id, s.ApiKey))
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", id, s.APIKey))
 
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
@@ -77,7 +77,7 @@ func (s *Client) GetAwsAccounts() (*AwsAccounts, error) {
 	awsaccounts := new(AwsAccounts)
 	page := 1
 	for {
-		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"100"}, "api_key": {s.ApiKey}}
+		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"100"}, "api_key": {s.APIKey}}
 		relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/?%s", params.Encode()))
 		responseBody, err := getResponsePage(s, relativeURL)
 		if err != nil {
@@ -101,7 +101,7 @@ func (s *Client) GetAwsAccounts() (*AwsAccounts, error) {
 
 // CreateAwsAccount enables a new AWS Account in CloudHealth.
 func (s *Client) CreateAwsAccount(account AwsAccount) (*AwsAccount, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts?api_key=%s", s.ApiKey))
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts?api_key=%s", s.APIKey))
 
 	responseBody, err := createResource(s, relativeURL, account)
 	if err != nil {
@@ -119,7 +119,7 @@ func (s *Client) CreateAwsAccount(account AwsAccount) (*AwsAccount, error) {
 
 // UpdateAwsAccount updates an existing AWS Account in CloudHealth.
 func (s *Client) UpdateAwsAccount(account AwsAccount) (*AwsAccount, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", account.ID, s.ApiKey))
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", account.ID, s.APIKey))
 
 	responseBody, err := updateResource(s, relativeURL, account)
 	if err != nil {
@@ -137,7 +137,7 @@ func (s *Client) UpdateAwsAccount(account AwsAccount) (*AwsAccount, error) {
 
 // DeleteAwsAccount removes the AWS Account with the specified CloudHealth ID.
 func (s *Client) DeleteAwsAccount(id int) error {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", id, s.ApiKey))
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", id, s.APIKey))
 	_, err := deleteResource(s, relativeURL)
 	if err != nil {
 		return err
@@ -148,7 +148,7 @@ func (s *Client) DeleteAwsAccount(id int) error {
 
 // GetAwsExternalID gets the AWS External ID tied to the CloudHealth Account.
 func (s *Client) GetAwsExternalID(id int) (*AwsExternalID, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d/generate_external_id?api_key=%s", id, s.ApiKey))
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d/generate_external_id?api_key=%s", id, s.APIKey))
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
 		return nil, err

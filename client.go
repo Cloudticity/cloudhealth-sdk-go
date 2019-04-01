@@ -7,14 +7,14 @@ import (
 
 // Client communicates with the CloudHealth API.
 type Client struct {
-	ApiKey      string
+	APIKey      string
 	EndpointURL *url.URL
 }
 
 // NewClient returns a new cloudhealth.Client for accessing the CloudHealth API.
 func NewClient(apiKey string, defaultEndpointURL string) (*Client, error) {
 	s := &Client{
-		ApiKey: apiKey,
+		APIKey: apiKey,
 	}
 	endpointURL, err := url.Parse(defaultEndpointURL)
 	if err != nil {
