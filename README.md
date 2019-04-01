@@ -31,6 +31,29 @@ if err != nil {
 log.Printf("AWS Account %s\n", account.Name)
 ```
 
+## Available Endpoints
+
+| Endpoint | Method | Description | Status |
+| -- | -- | -- | -- |
+| `/aws_accounts` | `POST` | Enable AWS Account | :heavy_check_mark: |
+| `/aws_accounts` | `GET` | AWS Accounts in CloudHealth  | :heavy_check_mark: |
+| `/aws_accounts/:id` | `GET` | Single AWS Account | :heavy_check_mark: |
+| `/aws_accounts/:id` | `PUT` | Update Existing AWS Account | :heavy_check_mark: |
+| `/aws_accounts/:id` | `DELETE` | Delete AWS Account | :heavy_check_mark: |
+| `/aws_accounts/:id/generate_external_id` | `GET` | Get External ID | :heavy_check_mark: |
+| `/customers` | `POST` | Create Partner Customer  | :heavy_check_mark: |
+| `/customers/:id` | `PUT` | Modify Existing Customer | :heavy_check_mark:  |
+| `/customers/:id` | `DELETE` | Delete Existing Customer  | :heavy_check_mark: |
+| `/customers/:id` | `GET` | Get Single Customer | :heavy_check_mark: |
+| `/customers` | `GET` | Get All Customers | :heavy_check_mark: |
+| `/customer_statements` | `GET` | Statement for Single Customer |  |
+| `/customer_statements` | `GET` | Statements for All Customers |  |
+| `/aws_account_assignments` | `POST` | Create AWS Account Assignment |  |
+| `/aws_account_assignments` | `GET` | Read All AWS Account Assignments |  |
+| `/aws_account_assignments/:id` | `GET` | Read Single AWS Account Assignment |  |
+| `/aws_account_assignments/:id` | `PUT` | Update AWS Account Assignment |  |
+| `/aws_account_assignments/:id` | `DELETE` | Delete AWS Account Assignment |  |
+
 ## Contributing
 
 Any and all contributions are welcome. Please don't hesitate to submit an issue or pull request.
