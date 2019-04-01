@@ -118,7 +118,7 @@ func TestGetSingleCustomerDoesntExist(t *testing.T) {
 	}
 
 	_, err = c.GetSingleCustomer(121212121)
-	if err != ErrCustomerNotFound {
+	if err != ErrNotFound {
 		t.Errorf("GetCustomer() returned the wrong error: %s", err)
 		return
 	}
