@@ -15,38 +15,38 @@ type AwsAccounts struct {
 
 // AwsAccount represents the configuration of an AWS Account enabled in CloudHealth.
 type AwsAccount struct {
-	ID               int                      `json:"id"`
+	ID               int                      `json:"id,omitempty"`
 	Name             string                   `json:"name"`
-	OwnerID          string                   `json:"owner_id"`
-	HidePublicFields bool                     `json:"hide_public_fields"`
-	Region           string                   `json:"region"`
-	CreatedAt        time.Time                `json:"created_at"`
-	UpdatedAt        time.Time                `json:"updated_at"`
-	AccountType      string                   `json:"account_type"`
-	VpcOnly          bool                     `json:"vpc_only"`
-	ClusterName      string                   `json:"cluster_name"`
-	Status           AwsAccountStatus         `json:"status"`
-	Authentication   AwsAccountAuthentication `json:"authentication"`
+	OwnerID          string                   `json:"owner_id,omitempty"`
+	HidePublicFields bool                     `json:"hide_public_fields,omitempty"`
+	Region           string                   `json:"region,omitempty"`
+	CreatedAt        time.Time                `json:"created_at,omitempty"`
+	UpdatedAt        time.Time                `json:"updated_at,omitempty"`
+	AccountType      string                   `json:"account_type,omitempty"`
+	VpcOnly          bool                     `json:"vpc_only,omitempty"`
+	ClusterName      string                   `json:"cluster_name,omitempty"`
+	Status           AwsAccountStatus         `json:"status,omitempty"`
+	Authentication   AwsAccountAuthentication `json:"authentication,omitempty"`
 }
 
 // AwsAccountStatus represents the status details for AWS integration.
 type AwsAccountStatus struct {
 	Level      string    `json:"level"`
-	LastUpdate time.Time `json:"last_update"`
+	LastUpdate time.Time `json:"last_update,omitempty"`
 }
 
 // AwsAccountAuthentication represents the authentication details for AWS integration.
 type AwsAccountAuthentication struct {
-	Protocol             string `json:"protocol"`
-	AccessKey            string `json:"access_key"`
-	SecreyKey            string `json:"secret_key"`
-	AssumeRoleArn        string `json:"assume_role_arn"`
-	AssumeRoleExternalID string `json:"assume_role_external_id"`
+	Protocol             string `json:"protocol,omitempty"`
+	AccessKey            string `json:"access_key,omitempty"`
+	SecreyKey            string `json:"secret_key,omitempty"`
+	AssumeRoleArn        string `json:"assume_role_arn,omitempty"`
+	AssumeRoleExternalID string `json:"assume_role_external_id,omitempty"`
 }
 
 // AwsExternalID is used to enable integration with AWS via IAM Roles.
 type AwsExternalID struct {
-	ExternalID string `json:"generated_external_id"`
+	ExternalID string `json:"generated_external_id,omitempty"`
 }
 
 // GetAwsAccount gets the AWS Account with the specified CloudHealth Account ID. (deprecated, will be removed in future, kept only to not break anything)

@@ -16,22 +16,22 @@ type Customers struct {
 
 // Customer represents the configuration of a Customer in CloudHealth.
 type Customer struct {
-	ID                          int                                 `json:"id"`
+	ID                          int                                 `json:"id,omitempty"`
 	Name                        string                              `json:"name"`
-	Classification              string                              `json:"classification"`
-	MarginPercentage            float64                             `json:"margin_percentage"`
-	CreatedAt                   time.Time                           `json:"created_at"`
-	UpdatedAt                   time.Time                           `json:"updated_at"`
-	GeneralExternalID           string                              `json:"generated_external_id"`
-	PartnerBillingConfiguration CustomerPartnerBillingConfiguration `json:"partner_billing_configuration"`
+	Classification              string                              `json:"classification,omitempty"`
+	MarginPercentage            float64                             `json:"margin_percentage,omitempty"`
+	CreatedAt                   time.Time                           `json:"created_at,omitempty"`
+	UpdatedAt                   time.Time                           `json:"updated_at,omitempty"`
+	GeneralExternalID           string                              `json:"generated_external_id,omitempty"`
+	PartnerBillingConfiguration CustomerPartnerBillingConfiguration `json:"partner_billing_configuration,omitempty"`
 	Address                     CustomerAddress                     `json:"address"`
-	BillingConfiguration        CustomerBillingConfiguration        `json:"billing_configuration"`
+	BillingConfiguration        CustomerBillingConfiguration        `json:"billing_configuration,omitempty"`
 }
 
 // CustomerPartnerBillingConfiguration represents partner billing details of a Customer.
 type CustomerPartnerBillingConfiguration struct {
 	Enabled bool   `json:"enabled"`
-	Folder  string `json:"folder"`
+	Folder  string `json:"folder,omitempty"`
 }
 
 // CustomerBillingConfiguration represents billing details of a Customer.
