@@ -116,7 +116,7 @@ func TestGetSingleAwsAccountDoesntExist(t *testing.T) {
 	}
 
 	_, err = c.GetAwsAccount(defaultAWSAccount.ID)
-	if err != ErrAwsAccountNotFound {
+	if err != ErrNotFound {
 		t.Errorf("GetAwsAccount() returned the wrong error: %s", err)
 		return
 	}
@@ -320,7 +320,7 @@ func TestDeleteAwsAccountDoesntExist(t *testing.T) {
 	}
 
 	err = c.DeleteAwsAccount(defaultAWSAccount.ID)
-	if err != ErrAwsAccountNotFound {
+	if err != ErrNotFound {
 		t.Errorf("DeleteAwsAccount() returned the wrong error: %s", err)
 		return
 	}

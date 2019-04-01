@@ -9,7 +9,7 @@ import (
 
 func TestBadApiKey(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusForbidden)
+		w.WriteHeader(http.StatusUnauthorized)
 		if r.Method != "GET" {
 			t.Errorf("Expected ‘GET’ request, got ‘%s’", r.Method)
 		}

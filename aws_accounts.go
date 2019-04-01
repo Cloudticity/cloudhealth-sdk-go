@@ -2,9 +2,7 @@ package cloudhealth
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -51,13 +49,6 @@ type AwsExternalID struct {
 	ExternalID string `json:"generated_external_id"`
 }
 
-// ErrAwsAccountNotFound is returned when an AWS Account doesn't exist on a Read or Delete.
-// It's useful for ignoring errors (e.g. delete if exists).
-var ErrAwsAccountNotFound = errors.New("AWS Account not found")
-
-// ErrAwsAccountCreationError is returned when an AWS Account can't be created. It may already exist.
-var ErrAwsAccountCreationError = errors.New("Bad Request. Please check if a AWS Account with this same name already exists")
-
 // GetAwsAccount gets the AWS Account with the specified CloudHealth Account ID. (deprecated, will be removed in future, kept only to not break anything)
 func (s *Client) GetAwsAccount(id int) (*AwsAccount, error) {
 	return s.GetSingleAwsAccount(id)
@@ -69,9 +60,6 @@ func (s *Client) GetSingleAwsAccount(id int) (*AwsAccount, error) {
 
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
-		if err == ErrNotFound {
-			return nil, ErrAwsAccountNotFound
-		}
 		return nil, err
 	}
 
@@ -117,9 +105,6 @@ func (s *Client) CreateAwsAccount(account AwsAccount) (*AwsAccount, error) {
 
 	responseBody, err := createResource(s, relativeURL, account)
 	if err != nil {
-		if err == ErrUnprocessableEntityError {
-			return nil, ErrAwsAccountCreationError
-		}
 		return nil, err
 	}
 
@@ -138,9 +123,6 @@ func (s *Client) UpdateAwsAccount(account AwsAccount) (*AwsAccount, error) {
 
 	responseBody, err := updateResource(s, relativeURL, account)
 	if err != nil {
-		if err == ErrUnprocessableEntityError {
-			return nil, ErrAwsAccountCreationError
-		}
 		return nil, err
 	}
 
@@ -155,39 +137,18 @@ func (s *Client) UpdateAwsAccount(account AwsAccount) (*AwsAccount, error) {
 
 // DeleteAwsAccount removes the AWS Account with the specified CloudHealth ID.
 func (s *Client) DeleteAwsAccount(id int) error {
-
 	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", id, s.ApiKey))
-	url := s.EndpointURL.ResolveReference(relativeURL)
-
-	req, err := http.NewRequest("DELETE", url.String(), nil)
-
-	client := &http.Client{
-		Timeout: time.Second * 15,
-	}
-	resp, err := client.Do(req)
+	_, err := deleteResource(s, relativeURL)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
 
-	switch resp.StatusCode {
-	case http.StatusOK:
-		return nil
-	case http.StatusNoContent:
-		return nil
-	case http.StatusNotFound:
-		return ErrAwsAccountNotFound
-	case http.StatusUnauthorized:
-		return ErrClientAuthenticationError
-	default:
-		return fmt.Errorf("Unknown Response with CloudHealth: `%d`", resp.StatusCode)
-	}
+	return nil
 }
 
 // GetAwsExternalID gets the AWS External ID tied to the CloudHealth Account.
 func (s *Client) GetAwsExternalID(id int) (*AwsExternalID, error) {
 	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d/generate_external_id?api_key=%s", id, s.ApiKey))
-
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
 		return nil, err

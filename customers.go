@@ -107,9 +107,6 @@ func (s *Client) CreateCustomer(customer Customer) (*Customer, error) {
 
 	responseBody, err := createResource(s, relativeURL, customer)
 	if err != nil {
-		if err == ErrUnprocessableEntityError {
-			return nil, ErrAwsAccountCreationError
-		}
 		return nil, err
 	}
 
@@ -128,9 +125,6 @@ func (s *Client) UpdateCustomer(customer Customer) (*Customer, error) {
 
 	responseBody, err := updateResource(s, relativeURL, customer)
 	if err != nil {
-		if err == ErrUnprocessableEntityError {
-			return nil, ErrAwsAccountCreationError
-		}
 		return nil, err
 	}
 
