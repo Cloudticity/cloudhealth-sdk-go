@@ -16,11 +16,11 @@ var defaultCustomer = Customer{
 
 var defaultCustomers = Customers{
 	Customers: []Customer{
-		Customer{
+		{
 			ID:   1234567890,
 			Name: "test",
 		},
-		Customer{
+		{
 			ID:   9876543210,
 			Name: "tset",
 		},
@@ -57,7 +57,7 @@ func TestGetCustomers(t *testing.T) {
 		t.Errorf("All customers have not been retrieved")
 		return
 	}
-	if returnedCustomers.Customers[0].ID != defaultCustomers.Customers[0].ID && returnedCustomers.Customers[0].ID != defaultCustomers.Customers[1].ID {
+	if returnedCustomers.Customers[0].ID != defaultCustomers.Customers[0].ID && returnedCustomers.Customers[1].ID != defaultCustomers.Customers[1].ID {
 		t.Errorf("Retrieved customers don't match")
 		return
 	}

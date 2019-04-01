@@ -46,8 +46,8 @@ log.Printf("AWS Account %s\n", account.Name)
 | `/customers/:id` | `DELETE` | Delete Existing Customer  | :heavy_check_mark: |
 | `/customers/:id` | `GET` | Get Single Customer | :heavy_check_mark: |
 | `/customers` | `GET` | Get All Customers | :heavy_check_mark: |
-| `/customer_statements` | `GET` | Statement for Single Customer |  |
-| `/customer_statements` | `GET` | Statements for All Customers |  |
+| `/customer_statements` | `GET` | Statement for Single Customer | :heavy_check_mark: |
+| `/customer_statements` | `GET` | Statements for All Customers | :heavy_check_mark: |
 | `/aws_account_assignments` | `POST` | Create AWS Account Assignment |  |
 | `/aws_account_assignments` | `GET` | Read All AWS Account Assignments |  |
 | `/aws_account_assignments/:id` | `GET` | Read Single AWS Account Assignment |  |

@@ -14,12 +14,13 @@ type BillingArtifacts struct {
 
 // BillingArtifact represents the configuration of a Customer Statement in CloudHealth with its details.
 type BillingArtifact struct {
-	CustomerID                           int     `json:"customer_id"`
-	BillingPeriod                        string  `json:"billing_period"`
-	TotalAmount                          float64 `json:"total_amount"`
-	Status                               string  `json:"status"`
-	DetailedBillingRecordsGenerationTime string  `json:"detailed_billing_records_generation_time"`
-	StatementGenerationTime              string  `json:"statement_generation_time"`
+	CustomerID                           int      `json:"customer_id"`
+	BillingPeriod                        string   `json:"billing_period"`
+	TotalAmount                          float64  `json:"total_amount"`
+	Status                               string   `json:"status"`
+	DetailedBillingRecordsGenerationTime string   `json:"detailed_billing_records_generation_time"`
+	StatementGenerationTime              string   `json:"statement_generation_time"`
+	Currency                             Currency `json:"currency"`
 }
 
 // Currency represents the currency used for billing.
