@@ -7,7 +7,12 @@ build: fmtcheck
 	go install
 
 test: fmtcheck
-	go test $(TEST) -v -timeout=30s -parallel=4
+	go test $(TEST) -cover -v -timeout=30s -parallel=4
+
+cover: fmtcheck
+	go test $(TEST) -cover -coverprofile=c.out; \
+	go tool cover -func=c.out; \
+	rm c.out
 
 vet:
 	@echo "go vet ."
