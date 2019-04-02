@@ -49,8 +49,8 @@ log.Printf("AWS Account %s\n", account.Name)
 | `/customer_statements` | `GET` | `GetSingleBillingArtifacts()` | Statement for Single Customer | :heavy_check_mark: |
 | `/customer_statements` | `GET` | `GetBillingArtifacts()` | Statements for All Customers | :heavy_check_mark: |
 | `/aws_account_assignments` | `POST` | | Create AWS Account Assignment |  |
-| `/aws_account_assignments` | `GET` | | Read All AWS Account Assignments |  |
-| `/aws_account_assignments/:id` | `GET` | | Read Single AWS Account Assignment |  |
+| `/aws_account_assignments` | `GET` | | Read All AWS Account Assignments | :heavy_check_mark: |
+| `/aws_account_assignments/:id` | `GET` | | Read Single AWS Account Assignment | :heavy_check_mark: |
 | `/aws_account_assignments/:id` | `PUT` | | Update AWS Account Assignment |  |
 | `/aws_account_assignments/:id` | `DELETE` | | Delete AWS Account Assignment |  |
 
