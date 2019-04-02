@@ -35,7 +35,7 @@ log.Printf("AWS Account %s\n", account.Name)
 
 | Endpoint | HTTP Method | SDK Method | Description | Status |
 | -- | -- | -- | -- | -- |
-| `/aws_accounts` | `POST` | `CreateAwsAccount()` | Enable AWS Account | | :heavy_check_mark: |
+| `/aws_accounts` | `POST` | `CreateAwsAccount()` | Enable AWS Account | :heavy_check_mark: |
 | `/aws_accounts` | `GET` | `GetAwsAccounts()` | AWS Accounts in CloudHealth  | :heavy_check_mark: |
 | `/aws_accounts/:id` | `GET` | `GetSingleAwsAccount()` | Single AWS Account | :heavy_check_mark: |
 | `/aws_accounts/:id` | `PUT` | `UpdateAwsAccount()` | Update Existing AWS Account | :heavy_check_mark: |
@@ -60,9 +60,13 @@ Any and all contributions are welcome. Please don't hesitate to submit an issue 
 
 ## Roadmap
 
-The initial release is focused on being consumed by a Terraform provider in AWS environments such as support for managing AWS Accounts in CloudHealth. Eventually, we plan to introduce support for perspectives and other vendor integrations such as Datadog.
+The initial release was focused on being consumed by a Terraform provider in AWS environments such as support for managing AWS Accounts in CloudHealth.
 
+The current state is a global SDK with all major primitives to set up your CloudHealth environment.
 
 ## Development
 
+Build and Install with `make` or `make build`.
+Run `gofmt` with `make fmt`.
 Run unit tests with `make test`.
+Run coverage tests with `make cover`.
