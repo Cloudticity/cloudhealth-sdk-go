@@ -29,8 +29,8 @@ type Currency struct {
 	Symbol string `json:"symbol"`
 }
 
-// GetSingleBillingArtifact gets the Customer Statements with the specified CloudHealth Customer ID.
-func (s *Client) GetSingleBillingArtifact(id int) (*BillingArtifact, error) {
+// GetSingleBillingArtifacts gets the Customer Statements for the specified CloudHealth Customer ID.
+func (s *Client) GetSingleBillingArtifacts(id int) (*BillingArtifact, error) {
 	relativeURL, _ := url.Parse(fmt.Sprintf("customer_statements/%d?api_key=%s", id, s.APIKey))
 
 	responseBody, err := getResponsePage(s, relativeURL)
@@ -47,8 +47,8 @@ func (s *Client) GetSingleBillingArtifact(id int) (*BillingArtifact, error) {
 	return billingArtifact, nil
 }
 
-// GetSingleBillingArtifacts gets all Customer Statements.
-func (s *Client) GetSingleBillingArtifacts() (*BillingArtifacts, error) {
+// GetBillingArtifacts gets all Customer Statements.
+func (s *Client) GetBillingArtifacts() (*BillingArtifacts, error) {
 	billingArtifacts := new(BillingArtifacts)
 	page := 1
 	for {
