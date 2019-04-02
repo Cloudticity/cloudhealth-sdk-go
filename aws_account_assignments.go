@@ -14,10 +14,10 @@ type AwsAccountAssignments struct {
 
 // AwsAccountAssignment represents the configuration of an AWS Account Assignment in CloudHealth with its details.
 type AwsAccountAssignment struct {
-	ID                  int    `json:"id"`
+	ID                  int    `json:"id,omitempty"`
 	OwnerID             string `json:"owner_id"`
 	CustomerID          int    `json:"customer_id"`
-	PayerAccountOwnerId string `json:"payer_account_owner_id"`
+	PayerAccountOwnerID string `json:"payer_account_owner_id,omitempty"`
 }
 
 // GetSingleAwsAccountAssignment gets the details for the Assignment with specified ID.
@@ -63,4 +63,51 @@ func (s *Client) GetAwsAccountAssignments() (*AwsAccountAssignments, error) {
 		page++
 	}
 	return awsaccountassignments, nil
+}
+
+// CreateAwsAccountAssignment creates a new AwsAccountAssignment in CloudHealth.
+func (s *Client) CreateAwsAccountAssignment(awsaccountassignment AwsAccountAssignment) (*AwsAccountAssignment, error) {
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_account_assignments?api_key=%s", s.APIKey))
+
+	responseBody, err := createResource(s, relativeURL, awsaccountassignment)
+	if err != nil {
+		return nil, err
+	}
+
+	var returnedAwsAccountAssignment = new(AwsAccountAssignment)
+	err = json.Unmarshal(responseBody, &returnedAwsAccountAssignment)
+	if err != nil {
+		return nil, err
+	}
+
+	return returnedAwsAccountAssignment, nil
+}
+
+// UpdateAwsAccountAssignment updates an existing AwsAccountAssignment in CloudHealth.
+func (s *Client) UpdateAwsAccountAssignment(awsaccountassignment AwsAccountAssignment) (*AwsAccountAssignment, error) {
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_account_assignments/%d?api_key=%s", awsaccountassignment.ID, s.APIKey))
+
+	responseBody, err := updateResource(s, relativeURL, awsaccountassignment)
+	if err != nil {
+		return nil, err
+	}
+
+	var returnedAwsAccountAssignment = new(AwsAccountAssignment)
+	err = json.Unmarshal(responseBody, &returnedAwsAccountAssignment)
+	if err != nil {
+		return nil, err
+	}
+
+	return returnedAwsAccountAssignment, nil
+}
+
+// DeleteAwsAccountAssignment removes the AwsAccountAssignment with the specified CloudHealth ID.
+func (s *Client) DeleteAwsAccountAssignment(id int) error {
+	relativeURL, _ := url.Parse(fmt.Sprintf("aws_account_assignments/%d?api_key=%s", id, s.APIKey))
+	_, err := deleteResource(s, relativeURL)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
