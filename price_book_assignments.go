@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// CustomerPriceBookAssignments represents all assignments to a Customer Price Book for all Customers.
+// CustomerPriceBookAssignments represents all assignments to a Custom Price Book for all Customers.
 type CustomerPriceBookAssignments struct {
 	CustomerPriceBookAssignments []CustomerPriceBookAssignment `json:"price_book_assignments"`
 }
@@ -40,8 +40,8 @@ func (s *Client) GetSingleCustomerPriceBookAssignment(id int) (*CustomerPriceBoo
 	return customerPriceBookAssignment, nil
 }
 
-// CustomerPriceBookAssignments gets all Assignments.
-func (s *Client) CustomerPriceBookAssignments() (*CustomerPriceBookAssignments, error) {
+// GetCustomerPriceBookAssignments gets all Assignments.
+func (s *Client) GetCustomerPriceBookAssignments() (*CustomerPriceBookAssignments, error) {
 	customerPriceBookAssignments := new(CustomerPriceBookAssignments)
 	page := 1
 	for {

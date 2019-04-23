@@ -48,14 +48,16 @@ log.Printf("AWS Account %s\n", account.Name)
 | `/customers` | `GET` | `GetCustomers` | Get All Customers | :heavy_check_mark: |
 | `/customer_statements` | `GET` | `GetSingleBillingArtifacts()` | Statement for Single Customer | :heavy_check_mark: |
 | `/customer_statements` | `GET` | `GetBillingArtifacts()` | Statements for All Customers | :heavy_check_mark: |
-| `/aws_account_assignments` | `POST` | | Create AWS Account Assignment |  |
-| `/aws_account_assignments` | `GET` | | Read All AWS Account Assignments | :heavy_check_mark: |
-| `/aws_account_assignments/:id` | `GET` | | Read Single AWS Account Assignment | :heavy_check_mark: |
-| `/aws_account_assignments/:id` | `PUT` | | Update AWS Account Assignment | :heavy_check_mark:  |
-| `/aws_account_assignments/:id` | `DELETE` | | Delete AWS Account Assignment | :heavy_check_mark: |
-| `/price_book_assignments` | `GET` | | Read qll Customer Price Book Assignments | :heavy_check_mark: |
-| `/price_book_assignments/:id` | `GET` | | Read Single Customer Price Book Assignment | :heavy_check_mark: |
-| `/price_book_assignments/:id` | `DELETE` | | Delete Customer Price Book Assignment | :heavy_check_mark: |
+| `/aws_account_assignments` | `POST` | `CreateAwsAccountAssignment()` | Create AWS Account Assignment | :heavy_check_mark: |
+| `/aws_account_assignments` | `GET` | `GetAwsAccountAssignments()` | Read All AWS Account Assignments | :heavy_check_mark: |
+| `/aws_account_assignments/:id` | `GET` | ``GetSingleAwsAccountAssignment()` | Read Single AWS Account Assignment | :heavy_check_mark: |
+| `/aws_account_assignments/:id` | `PUT` | `UpdateAwsAccountAssignment()` | Update AWS Account Assignment | :heavy_check_mark:  |
+| `/aws_account_assignments/:id` | `DELETE` | `DeleteAwsAccountAssignment()` | Delete AWS Account Assignment | :heavy_check_mark: |
+| `/price_book_assignments` | `GET` | `GetCustomerPriceBookAssignments()` | Read all Customer Price Book Assignments | :heavy_check_mark: |
+| `/price_book_assignments/:id` | `GET` | `GetSingleCustomerPriceBookAssignment()` | Read Single Customer Price Book Assignment | :heavy_check_mark: |
+| `/price_book_assignments/:id` | `DELETE` | `DeleteCustomerPriceBookAssignment()` | Delete Customer Price Book Assignment | :heavy_check_mark: |
+| `/price_book_account_assignments` | `GET` | `GetAccountPriceBookAssignments()` | Read all Account Price Book Assignments | :heavy_check_mark: |
+| `/price_book_account_assignments/:id` | `GET` | `GetSingleAccountPriceBookAssignment()` | Read Single Account Price Book Assignment | :heavy_check_mark: |
 
 ## Contributing
 
