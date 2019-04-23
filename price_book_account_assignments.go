@@ -14,10 +14,10 @@ type AccountPriceBookAssignments struct {
 
 // AccountPriceBookAssignment represents the configuration of a Customer Price Book assignment to a Customer.
 type AccountPriceBookAssignment struct {
-	ID                    int `json:"id"`
-	TargetClientAPIID     int `json:"target_client_api_id"`
-	PriceBookAssignmentID int `json:"price_book_assignment_id"`
-	BillingAccountOwnerID int `json:"billing_account_owner_id"`
+	ID                    int         `json:"id"`
+	TargetClientAPIID     int         `json:"target_client_api_id"`
+	PriceBookAssignmentID int         `json:"price_book_assignment_id"`
+	BillingAccountOwnerID interface{} `json:"billing_account_owner_id"`
 }
 
 // GetSingleAccountPriceBookAssignment gets the details for the Assignment with specified ID.
