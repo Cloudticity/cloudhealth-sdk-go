@@ -53,6 +53,9 @@ log.Printf("AWS Account %s\n", account.Name)
 | `/aws_account_assignments/:id` | `GET` | | Read Single AWS Account Assignment | :heavy_check_mark: |
 | `/aws_account_assignments/:id` | `PUT` | | Update AWS Account Assignment | :heavy_check_mark:  |
 | `/aws_account_assignments/:id` | `DELETE` | | Delete AWS Account Assignment | :heavy_check_mark: |
+| `/price_book_assignments` | `GET` | | Read qll Customer Price Book Assignments | :heavy_check_mark: |
+| `/price_book_assignments/:id` | `GET` | | Read Single Customer Price Book Assignment | :heavy_check_mark: |
+| `/price_book_assignments/:id` | `DELETE` | | Delete Customer Price Book Assignment | :heavy_check_mark: |
 
 ## Contributing
 
