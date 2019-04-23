@@ -10,7 +10,7 @@ import (
 
 // CustomerPriceBookAssignments represents all assignments to a Customer Price Book for all Customers.
 type CustomerPriceBookAssignments struct {
-	CustomerPriceBookAssignments []CustomerPriceBookAssignment `json:"customer_price_book_assignments"`
+	CustomerPriceBookAssignments []CustomerPriceBookAssignment `json:"price_book_assignments"`
 }
 
 // CustomerPriceBookAssignment represents the configuration of a Customer Price Book assignment to a Customer.
