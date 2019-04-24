@@ -7,19 +7,20 @@ import (
 	"strconv"
 )
 
-// BillingArtifacts represents all Customer Statements enabled in CloudHealth with their details.
-type BillingArtifacts struct {
-	BillingArtifacts []BillingArtifact `json:"billing_artifacts"`
+// CustomerStatements represents all Customer Statements enabled in CloudHealth with their details.
+type CustomerStatements struct {
+	CustomerStatements []CustomerStatement `json:"billing_artifacts"`
 }
 
-// BillingArtifact represents the configuration of a Customer Statement in CloudHealth with its details.
-type BillingArtifact struct {
+// CustomerStatement represents the configuration of a Customer Statement in CloudHealth with its details.
+type CustomerStatement struct {
 	CustomerID                           int      `json:"customer_id"`
 	BillingPeriod                        string   `json:"billing_period"`
 	TotalAmount                          float64  `json:"total_amount"`
 	Status                               string   `json:"status"`
 	DetailedBillingRecordsGenerationTime string   `json:"detailed_billing_records_generation_time"`
 	StatementGenerationTime              string   `json:"statement_generation_time"`
+	StatementSummaryGenerationTime       string   `json:"statement_summary_generation_time"`
 	Currency                             Currency `json:"currency"`
 }
 
@@ -29,8 +30,8 @@ type Currency struct {
 	Symbol string `json:"symbol"`
 }
 
-// GetSingleBillingArtifacts gets the Customer Statements for the specified CloudHealth Customer ID.
-func (s *Client) GetSingleBillingArtifacts(id int) (*BillingArtifact, error) {
+// GetSingleCustomerStatement gets details for the specified CloudHealth Customer Statement ID.
+func (s *Client) GetSingleCustomerStatement(id int) (*CustomerStatement, error) {
 	relativeURL, _ := url.Parse(fmt.Sprintf("customer_statements/%d?api_key=%s", id, s.APIKey))
 
 	responseBody, err := getResponsePage(s, relativeURL)
@@ -38,7 +39,7 @@ func (s *Client) GetSingleBillingArtifacts(id int) (*BillingArtifact, error) {
 		return nil, err
 	}
 
-	var billingArtifact = new(BillingArtifact)
+	var billingArtifact = new(CustomerStatement)
 	err = json.Unmarshal(responseBody, &billingArtifact)
 	if err != nil {
 		return nil, err
@@ -47,29 +48,30 @@ func (s *Client) GetSingleBillingArtifacts(id int) (*BillingArtifact, error) {
 	return billingArtifact, nil
 }
 
-// GetBillingArtifacts gets all Customer Statements.
-func (s *Client) GetBillingArtifacts() (*BillingArtifacts, error) {
-	billingArtifacts := new(BillingArtifacts)
+// GetCustomerStatements gets all Customer Statements.
+func (s *Client) GetCustomerStatements() (*CustomerStatements, error) {
+	customerStatements := new(CustomerStatements)
 	page := 1
 	for {
-		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"50"}, "api_key": {s.APIKey}}
+		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"100"}, "api_key": {s.APIKey}}
 		relativeURL, _ := url.Parse(fmt.Sprintf("customer_statements/?%s", params.Encode()))
 		responseBody, err := getResponsePage(s, relativeURL)
 		if err != nil {
 			return nil, err
 		}
-		var ba = new(BillingArtifacts)
+		var ba = new(CustomerStatements)
 		err = json.Unmarshal(responseBody, &ba)
 		if err != nil {
 			return nil, err
 		}
-		for _, a := range ba.BillingArtifacts {
-			billingArtifacts.BillingArtifacts = append(billingArtifacts.BillingArtifacts, a)
+		for _, a := range ba.CustomerStatements {
+			customerStatements.CustomerStatements = append(customerStatements.CustomerStatements, a)
 		}
-		if len(ba.BillingArtifacts) < 50 {
+		if len(ba.CustomerStatements) < 100 {
 			break
 		}
 		page++
 	}
-	return billingArtifacts, nil
+
+	return customerStatements, nil
 }

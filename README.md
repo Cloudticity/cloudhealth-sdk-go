@@ -46,8 +46,8 @@ log.Printf("AWS Account %s\n", account.Name)
 | `/customers/:id` | `DELETE` | `DeleteCustomer` | Delete Existing Customer  | :heavy_check_mark: |
 | `/customers/:id` | `GET` | `GetSingleCustomer()` | Get Single Customer | :heavy_check_mark: |
 | `/customers` | `GET` | `GetCustomers` | Get All Customers | :heavy_check_mark: |
-| `/customer_statements` | `GET` | `GetSingleBillingArtifacts()` | Statement for Single Customer | :heavy_check_mark: |
-| `/customer_statements` | `GET` | `GetBillingArtifacts()` | Statements for All Customers | :heavy_check_mark: |
+| `/customer_statements` | `GET` | `GetSingleCustomerStatements()` | Statement for Single Customer | :heavy_check_mark: |
+| `/customer_statements` | `GET` | `GetCustomerStatements()` | Statements for All Customers | :heavy_check_mark: |
 | `/aws_account_assignments` | `POST` | `CreateAwsAccountAssignment()` | Create AWS Account Assignment | :heavy_check_mark: |
 | `/aws_account_assignments` | `GET` | `GetAwsAccountAssignments()` | Read All AWS Account Assignments | :heavy_check_mark: |
 | `/aws_account_assignments/:id` | `GET` | ``GetSingleAwsAccountAssignment()` | Read Single AWS Account Assignment | :heavy_check_mark: |
