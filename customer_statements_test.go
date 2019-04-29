@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-var defaultCustomerStatement = CustomerStatement{
+var defaultBillingStatement = BillingStatement{
 	CustomerID:    1234567890,
 	BillingPeriod: "1970-01-01",
 	TotalAmount:   9999.99,
@@ -18,8 +18,8 @@ var defaultCustomerStatement = CustomerStatement{
 	Currency:                             Currency{Name: "USD", Symbol: "$"},
 }
 
-var defaultCustomerStatements = CustomerStatements{
-	CustomerStatements: []CustomerStatement{
+var defaultBillingStatements = BillingStatements{
+	BillingStatements: []BillingStatement{
 		{
 			CustomerID:    1234567890,
 			BillingPeriod: "1970-01-01",
@@ -41,17 +41,17 @@ var defaultCustomerStatements = CustomerStatements{
 	},
 }
 
-func TestGetSingleCustomerStatement(t *testing.T) {
+func TestGetSingleBillingStatement(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		if r.Method != "GET" {
 			t.Errorf("Expected ‘GET’ request, got ‘%s’", r.Method)
 		}
-		expectedURL := fmt.Sprintf("/customer_statements/%d", defaultCustomerStatement.CustomerID)
+		expectedURL := fmt.Sprintf("/customer_statements/")
 		if r.URL.EscapedPath() != expectedURL {
 			t.Errorf("Expected request to ‘%s’, got ‘%s’", expectedURL, r.URL.EscapedPath())
 		}
-		body, _ := json.Marshal(defaultCustomerStatement)
+		body, _ := json.Marshal(defaultBillingStatement)
 		w.Write(body)
 	}))
 	defer ts.Close()
@@ -62,18 +62,18 @@ func TestGetSingleCustomerStatement(t *testing.T) {
 		return
 	}
 
-	returnedCustomerStatement, err := c.GetSingleCustomerStatement(1234567890)
+	returnedBillingStatement, err := c.GetSingleCustomerStatement(1234567890)
 	if err != nil {
 		t.Errorf("NewClient() returned an error: %s", err)
 		return
 	}
-	if returnedCustomerStatement.CustomerID != defaultCustomerStatement.CustomerID {
-		t.Errorf("GetCustomerStatement() expected CustomerID `%d`, got `%d`", defaultCustomerStatement.CustomerID, returnedCustomerStatement.CustomerID)
+	if returnedBillingStatement.CustomerID != defaultBillingStatement.CustomerID {
+		t.Errorf("GetBillingStatement() expected CustomerID `%d`, got `%d`", defaultBillingStatement.CustomerID, returnedBillingStatement.CustomerID)
 		return
 	}
 }
 
-func TestGetCustomerStatements(t *testing.T) {
+func TestGetBillingStatements(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		if r.Method != "GET" {
@@ -83,7 +83,7 @@ func TestGetCustomerStatements(t *testing.T) {
 		if r.URL.EscapedPath() != expectedURL {
 			t.Errorf("Expected request to ‘%s’, got ‘%s’", expectedURL, r.URL.EscapedPath())
 		}
-		body, _ := json.Marshal(defaultCustomerStatements)
+		body, _ := json.Marshal(defaultBillingStatements)
 		w.Write(body)
 	}))
 	defer ts.Close()
@@ -94,16 +94,16 @@ func TestGetCustomerStatements(t *testing.T) {
 		return
 	}
 
-	returnedCustomerStatements, err := c.GetCustomerStatements()
+	returnedBillingStatements, err := c.GetCustomerStatements()
 	if err != nil {
 		t.Errorf("NewClient() returned an error: %s", err)
 		return
 	}
-	if len(returnedCustomerStatements.CustomerStatements) != 2 {
+	if len(returnedBillingStatements.BillingStatements) != 2 {
 		t.Errorf("All customer statements have not been retrieved")
 		return
 	}
-	if returnedCustomerStatements.CustomerStatements[0].CustomerID != defaultCustomerStatements.CustomerStatements[0].CustomerID && returnedCustomerStatements.CustomerStatements[1].CustomerID != defaultCustomerStatements.CustomerStatements[1].CustomerID {
+	if returnedBillingStatements.BillingStatements[0].CustomerID != defaultBillingStatements.BillingStatements[0].CustomerID && returnedBillingStatements.BillingStatements[1].CustomerID != defaultBillingStatements.BillingStatements[1].CustomerID {
 		t.Errorf("Retrieved customer statements don't match")
 		return
 	}

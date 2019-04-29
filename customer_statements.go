@@ -7,13 +7,13 @@ import (
 	"strconv"
 )
 
-// CustomerStatements represents all Customer Statements enabled in CloudHealth with their details.
-type CustomerStatements struct {
-	CustomerStatements []CustomerStatement `json:"billing_artifacts"`
+// BillingStatements represents all Customer Statements enabled in CloudHealth with their details.
+type BillingStatements struct {
+	BillingStatements []BillingStatement `json:"billing_artifacts"`
 }
 
-// CustomerStatement represents the configuration of a Customer Statement in CloudHealth with its details.
-type CustomerStatement struct {
+// BillingStatement represents the configuration of a Customer Statement in CloudHealth with its details.
+type BillingStatement struct {
 	CustomerID                           int      `json:"customer_id"`
 	BillingPeriod                        string   `json:"billing_period"`
 	TotalAmount                          float64  `json:"total_amount"`
@@ -31,15 +31,15 @@ type Currency struct {
 }
 
 // GetSingleCustomerStatement gets details for the specified CloudHealth Customer Statement ID.
-func (s *Client) GetSingleCustomerStatement(id int) (*CustomerStatement, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("customer_statements/%d?api_key=%s", id, s.APIKey))
+func (s *Client) GetSingleCustomerStatement(id int) (*BillingStatement, error) {
+	relativeURL, _ := url.Parse(fmt.Sprintf("customer_statements/?client_api_id=%d&api_key=%s", id, s.APIKey))
 
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
 		return nil, err
 	}
 
-	var billingArtifact = new(CustomerStatement)
+	var billingArtifact = new(BillingStatement)
 	err = json.Unmarshal(responseBody, &billingArtifact)
 	if err != nil {
 		return nil, err
@@ -48,9 +48,9 @@ func (s *Client) GetSingleCustomerStatement(id int) (*CustomerStatement, error) 
 	return billingArtifact, nil
 }
 
-// GetCustomerStatements gets all Customer Statements.
-func (s *Client) GetCustomerStatements() (*CustomerStatements, error) {
-	customerStatements := new(CustomerStatements)
+// GetCustomerStatements gets all Statements.
+func (s *Client) GetCustomerStatements() (*BillingStatements, error) {
+	billingStatements := new(BillingStatements)
 	page := 1
 	for {
 		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"100"}, "api_key": {s.APIKey}}
@@ -59,19 +59,19 @@ func (s *Client) GetCustomerStatements() (*CustomerStatements, error) {
 		if err != nil {
 			return nil, err
 		}
-		var ba = new(CustomerStatements)
+		var ba = new(BillingStatements)
 		err = json.Unmarshal(responseBody, &ba)
 		if err != nil {
 			return nil, err
 		}
-		for _, a := range ba.CustomerStatements {
-			customerStatements.CustomerStatements = append(customerStatements.CustomerStatements, a)
+		for _, a := range ba.BillingStatements {
+			billingStatements.BillingStatements = append(billingStatements.BillingStatements, a)
 		}
-		if len(ba.CustomerStatements) < 100 {
+		if len(ba.BillingStatements) < 100 {
 			break
 		}
 		page++
 	}
 
-	return customerStatements, nil
+	return billingStatements, nil
 }
