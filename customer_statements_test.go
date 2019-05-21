@@ -16,6 +16,8 @@ var defaultBillingArtifact = BillingArtifact{
 	DetailedBillingRecordsGenerationTime: "1970-01-01",
 	StatementGenerationTime:              "1970-01-01",
 	Currency:                             Currency{Name: "USD", Symbol: "$"},
+	InvoiceId:                            "121232",
+	InvoiceDate:                          "1970-01-01",
 }
 
 var defaultBillingArtifacts = BillingArtifacts{
@@ -28,6 +30,8 @@ var defaultBillingArtifacts = BillingArtifacts{
 			DetailedBillingRecordsGenerationTime: "1970-01-01",
 			StatementGenerationTime:              "1970-01-01",
 			Currency:                             Currency{Name: "USD", Symbol: "$"},
+			InvoiceId:                            "121232",
+			InvoiceDate:                          "1970-01-01",
 		},
 		{
 			CustomerID:    98765433210,
@@ -37,6 +41,8 @@ var defaultBillingArtifacts = BillingArtifacts{
 			DetailedBillingRecordsGenerationTime: "1970-01-01",
 			StatementGenerationTime:              "1970-01-01",
 			Currency:                             Currency{Name: "USD", Symbol: "$"},
+			InvoiceId:                            "121232",
+			InvoiceDate:                          "1970-01-01",
 		},
 	},
 }

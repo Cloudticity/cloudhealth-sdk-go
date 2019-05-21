@@ -22,6 +22,8 @@ type BillingArtifact struct {
 	StatementGenerationTime              string   `json:"statement_generation_time"`
 	StatementSummaryGenerationTime       string   `json:"statement_summary_generation_time"`
 	Currency                             Currency `json:"currency"`
+	InvoiceId                            string   `json:"invoice_id,omitempty"`
+	InvoiceDate                          string   `json:"invoice_date,omitempty"`
 }
 
 // Currency represents the currency used for billing.
