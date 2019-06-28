@@ -25,6 +25,7 @@ type Customer struct {
 	PartnerBillingConfiguration CustomerPartnerBillingConfiguration `json:"partner_billing_configuration,omitempty"`
 	Address                     CustomerAddress                     `json:"address"`
 	BillingConfiguration        CustomerBillingConfiguration        `json:"billing_configuration,omitempty"`
+	Tags                        map[string]string                   `json:"tags,omitempty"`
 }
 
 // CustomerPartnerBillingConfiguration represents partner billing details of a Customer.

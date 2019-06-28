@@ -12,6 +12,7 @@ import (
 var defaultCustomer = Customer{
 	ID:   1234567890,
 	Name: "test",
+	Tags: map[string]string{"key": "value"},
 }
 
 var defaultCustomers = Customers{
@@ -19,10 +20,12 @@ var defaultCustomers = Customers{
 		{
 			ID:   1234567890,
 			Name: "test",
+			Tags: map[string]string{"key": "value"},
 		},
 		{
 			ID:   9876543210,
 			Name: "tset",
+			Tags: map[string]string{"key": "value"},
 		},
 	},
 }
