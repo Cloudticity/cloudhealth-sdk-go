@@ -27,7 +27,7 @@ type AwsAccount struct {
 	ClusterName      string                   `json:"cluster_name,omitempty"`
 	Status           AwsAccountStatus         `json:"status,omitempty"`
 	Authentication   AwsAccountAuthentication `json:"authentication,omitempty"`
-	Tags             map[string]string        `json:"tags,omitempty"`
+	Tags             []map[string]string      `json:"tags,omitempty"`
 }
 
 // AwsAccountStatus represents the status details for AWS integration.

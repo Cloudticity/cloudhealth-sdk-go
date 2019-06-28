@@ -12,7 +12,7 @@ import (
 var defaultAWSAccount = AwsAccount{
 	ID:   1234567890,
 	Name: "test",
-	Tags: map[string]string{"key": "value"},
+	Tags: []map[string]string{map[string]string{"key": "A", "value": "B"}},
 }
 
 var defaultAWSAccounts = AwsAccounts{
@@ -20,12 +20,12 @@ var defaultAWSAccounts = AwsAccounts{
 		{
 			ID:   1234567890,
 			Name: "test",
-			Tags: map[string]string{"key": "value"},
+			Tags: []map[string]string{map[string]string{"key": "A", "value": "B"}},
 		},
 		{
 			ID:   9876543210,
 			Name: "tset",
-			Tags: map[string]string{"key": "value"},
+			Tags: []map[string]string{map[string]string{"key": "A", "value": "B"}},
 		},
 	},
 }
