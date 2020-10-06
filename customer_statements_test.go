@@ -37,7 +37,7 @@ var defaultBillingArtifacts = BillingArtifacts{
 		},
 		{
 			CustomerID:    98765433210,
-	                CloudProvider: "AWS",
+			CloudProvider: "AWS",
 			BillingPeriod: "1970-01-01",
 			TotalAmount:   110.00,
 			Status:        "Final",
