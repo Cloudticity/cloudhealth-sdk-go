@@ -15,6 +15,7 @@ type BillingArtifacts struct {
 // BillingArtifact represents the configuration of a Customer Statement in CloudHealth with its details.
 type BillingArtifact struct {
 	CustomerID                           int      `json:"customer_id"`
+	CloudProvider                        string   `json:"cloud"`
 	BillingPeriod                        string   `json:"billing_period"`
 	TotalAmount                          float64  `json:"total_amount"`
 	Status                               string   `json:"status"`
