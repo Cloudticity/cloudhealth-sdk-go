@@ -10,13 +10,13 @@ A Go wrapper for the [CloudHealth Cloud Management Platform](https://www.cloudhe
 Run the following command to retrieve the SDK:
 
 ```bash
-go get -u github.com/nextgenhealthcare/cloudhealth-sdk-go
+go get -u github.com/Cloudticity/cloudhealth-sdk-go
 ```
 
 You will also need an API Key from CloudHealth. For more information, see [Getting Your API Key](http://apidocs.cloudhealthtech.com/#documentation_getting-your-api-key)
 
 ```go
-import cloudhealth "github.com/nextgenhealthcare/cloudhealth-sdk-go"
+import cloudhealth "github.com/Cloudticity/cloudhealth-sdk-go"
 
 client, _ := cloudhealth.NewClient("api_key", "https://chapi.cloudhealthtech.com/v1/")
 

@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBadAPIKey(t *testing.T) {
@@ -52,5 +54,27 @@ func TestBadEndPoint(t *testing.T) {
 	if err != ErrClientAuthenticationError {
 		t.Errorf("GetAwsAccounts() returned the wrong error: %s", err)
 		return
+	}
+}
+
+func TestNewClient(t *testing.T) {
+	type args struct {
+		apiKey             string
+		defaultEndpointURL string
+	}
+	tests := []struct {
+		name      string
+		args      args
+		want      *Client
+		assertion assert.ErrorAssertionFunc
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewClient(tt.args.apiKey, tt.args.defaultEndpointURL)
+			tt.assertion(t, err)
+			assert.Equal(t, tt.want, got)
+		})
 	}
 }

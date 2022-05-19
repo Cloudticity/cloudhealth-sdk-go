@@ -9,11 +9,11 @@ import (
 )
 
 var defaultBillingArtifact = BillingArtifact{
-	CustomerID:    1234567890,
-	CloudProvider: "AWS",
-	BillingPeriod: "1970-01-01",
-	TotalAmount:   9999.99,
-	Status:        "Final",
+	CustomerID:                           1234567890,
+	CloudProvider:                        "AWS",
+	BillingPeriod:                        "1970-01-01",
+	TotalAmount:                          9999.99,
+	Status:                               "Final",
 	DetailedBillingRecordsGenerationTime: "1970-01-01",
 	StatementGenerationTime:              "1970-01-01",
 	Currency:                             Currency{Name: "USD", Symbol: "$"},
@@ -24,11 +24,11 @@ var defaultBillingArtifact = BillingArtifact{
 var defaultBillingArtifacts = BillingArtifacts{
 	BillingArtifacts: []BillingArtifact{
 		{
-			CustomerID:    1234567890,
-	                CloudProvider: "AWS",
-			BillingPeriod: "1970-01-01",
-			TotalAmount:   9999.99,
-			Status:        "Final",
+			CustomerID:                           1234567890,
+			CloudProvider:                        "AWS",
+			BillingPeriod:                        "1970-01-01",
+			TotalAmount:                          9999.99,
+			Status:                               "Final",
 			DetailedBillingRecordsGenerationTime: "1970-01-01",
 			StatementGenerationTime:              "1970-01-01",
 			Currency:                             Currency{Name: "USD", Symbol: "$"},
@@ -36,11 +36,11 @@ var defaultBillingArtifacts = BillingArtifacts{
 			InvoiceDate:                          "1970-01-01",
 		},
 		{
-			CustomerID:    98765433210,
-			CloudProvider: "AWS",
-			BillingPeriod: "1970-01-01",
-			TotalAmount:   110.00,
-			Status:        "Final",
+			CustomerID:                           98765433210,
+			CloudProvider:                        "AWS",
+			BillingPeriod:                        "1970-01-01",
+			TotalAmount:                          110.00,
+			Status:                               "Final",
 			DetailedBillingRecordsGenerationTime: "1970-01-01",
 			StatementGenerationTime:              "1970-01-01",
 			Currency:                             Currency{Name: "USD", Symbol: "$"},

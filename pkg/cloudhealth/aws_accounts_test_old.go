@@ -36,7 +36,7 @@ func TestGetAwsAccounts(t *testing.T) {
 		if r.Method != "GET" {
 			t.Errorf("Expected ‘GET’ request, got ‘%s’", r.Method)
 		}
-		expectedURL := "/aws_accounts/"
+		expectedURL := "/v1/aws_accounts"
 		if r.URL.EscapedPath() != expectedURL {
 			t.Errorf("Expected request to ‘%s’, got ‘%s’", expectedURL, r.URL.EscapedPath())
 		}
@@ -45,7 +45,7 @@ func TestGetAwsAccounts(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	c, err := NewClient("apiKey", ts.URL)
+	c, err := NewClient("apiKey", fmt.Sprintf("%s/", ts.URL))
 	if err != nil {
 		t.Errorf("NewClient() returned an error: %s", err)
 		return
@@ -88,7 +88,7 @@ func TestGetSingleAwsAccount(t *testing.T) {
 		return
 	}
 
-	returnedAwsAccount, err := c.GetAwsAccount(defaultAWSAccount.ID)
+	returnedAwsAccount, err := c.GetSingleAwsAccount(defaultAWSAccount.ID)
 	if err != nil {
 		t.Errorf("GetAwsAccount() returned an error: %s", err)
 		return
@@ -118,7 +118,7 @@ func TestGetSingleAwsAccountDoesntExist(t *testing.T) {
 		return
 	}
 
-	_, err = c.GetAwsAccount(defaultAWSAccount.ID)
+	_, err = c.GetSingleAwsAccount(defaultAWSAccount.ID)
 	if err != ErrNotFound {
 		t.Errorf("GetAwsAccount() returned the wrong error: %s", err)
 		return

@@ -51,88 +51,110 @@ type CustomerAddress struct {
 
 // GetSingleCustomer gets the Customer with the specified CloudHealth Customer ID.
 func (s *Client) GetSingleCustomer(id int) (*Customer, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("customers/%d?api_key=%s", id, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v1/customers/%d", id)
 
+	// Make the API call
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
 		return nil, err
 	}
 
-	var customer = new(Customer)
+	// Unmarshal the response data into the Customer struct
+	var customer Customer
 	err = json.Unmarshal(responseBody, &customer)
 	if err != nil {
 		return nil, err
 	}
 
-	return customer, nil
+	return &customer, nil
 }
 
 // GetCustomers gets all AWS Accounts enabled in CloudHealth.
 func (s *Client) GetCustomers() (*Customers, error) {
-	customers := new(Customers)
-	page := 1
+	// Set variables we will need along the way
+	var customers Customers
+	var page, pageSize int = 1, 100
+
+	// Loop for paging
 	for {
-		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"50"}, "api_key": {s.APIKey}}
-		relativeURL, _ := url.Parse(fmt.Sprintf("customers/?%s", params.Encode()))
+		// Set up the query parameters for the API
+		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {strconv.Itoa(pageSize)}}
+
+		// Set up the URL
+		relativeURL := fmt.Sprintf("v1/customers?%s", params.Encode())
+
+		// Make the API call
 		responseBody, err := getResponsePage(s, relativeURL)
 		if err != nil {
 			return nil, err
 		}
-		var csts = new(Customers)
-		err = json.Unmarshal(responseBody, &csts)
+
+		// Unmarshal the response data into the Customers struct
+		err = json.Unmarshal(responseBody, &customers)
 		if err != nil {
 			return nil, err
 		}
-		for _, a := range csts.Customers {
-			customers.Customers = append(customers.Customers, a)
-		}
-		if len(csts.Customers) < 50 {
+
+		// Check length of array in Customers' struct to determine if we should break out of the loop
+		if len(customers.Customers) < pageSize {
 			break
 		}
+
+		// Increment page counter
 		page++
 	}
-	return customers, nil
+	return &customers, nil
 }
 
 // CreateCustomer creates a new Customer in CloudHealth.
 func (s *Client) CreateCustomer(customer Customer) (*Customer, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("customers?api_key=%s", s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v1/customers")
 
+	// Make the API call
 	responseBody, err := createResource(s, relativeURL, customer)
 	if err != nil {
 		return nil, err
 	}
 
-	var returnedCustomer = new(Customer)
+	// Unmarshal the response data into the Organizations struct
+	var returnedCustomer Customer
 	err = json.Unmarshal(responseBody, &returnedCustomer)
 	if err != nil {
 		return nil, err
 	}
 
-	return returnedCustomer, nil
+	return &returnedCustomer, nil
 }
 
 // UpdateCustomer updates an existing Customer in CloudHealth.
 func (s *Client) UpdateCustomer(customer Customer) (*Customer, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("customers/%d?api_key=%s", customer.ID, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v1/customers/%d", customer.ID)
 
+	// Make the API call
 	responseBody, err := updateResource(s, relativeURL, customer)
 	if err != nil {
 		return nil, err
 	}
 
-	var returnedcustomer = new(Customer)
+	// Unmarshal the response data into the Organizations struct
+	var returnedcustomer Customer
 	err = json.Unmarshal(responseBody, &returnedcustomer)
 	if err != nil {
 		return nil, err
 	}
 
-	return returnedcustomer, nil
+	return &returnedcustomer, nil
 }
 
 // DeleteCustomer removes the Customer with the specified CloudHealth ID.
 func (s *Client) DeleteCustomer(id int) error {
-	relativeURL, _ := url.Parse(fmt.Sprintf("customers/%d?api_key=%s", id, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v1/customers/%d", id)
+
+	// Make the API call
 	_, err := deleteResource(s, relativeURL)
 	if err != nil {
 		return err

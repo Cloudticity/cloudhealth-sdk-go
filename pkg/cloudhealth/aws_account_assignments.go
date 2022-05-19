@@ -22,88 +22,110 @@ type AwsAccountAssignment struct {
 
 // GetSingleAwsAccountAssignment gets the details for the Assignment with specified ID.
 func (s *Client) GetSingleAwsAccountAssignment(id int) (*AwsAccountAssignment, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_account_assignments/%d?api_key=%s", id, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v2/aws_account_assignments/%d", id)
 
+	// Make the API call
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
 		return nil, err
 	}
 
-	var awsaccountassignment = new(AwsAccountAssignment)
+	// Unmarshal the response data into the AwsAccountAssignment struct
+	var awsaccountassignment AwsAccountAssignment
 	err = json.Unmarshal(responseBody, &awsaccountassignment)
 	if err != nil {
 		return nil, err
 	}
 
-	return awsaccountassignment, nil
+	return &awsaccountassignment, nil
 }
 
 // GetAwsAccountAssignments gets all Assignments.
 func (s *Client) GetAwsAccountAssignments() (*AwsAccountAssignments, error) {
-	awsaccountassignments := new(AwsAccountAssignments)
-	page := 1
+	// Set variables we will need along the way
+	var awsaccountassignments AwsAccountAssignments
+	var page, pageSize int = 1, 50
+
+	// Loop for paging
 	for {
-		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"50"}, "api_key": {s.APIKey}}
-		relativeURL, _ := url.Parse(fmt.Sprintf("aws_account_assignments/?%s", params.Encode()))
+		// Set up the query parameters for the API
+		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {strconv.Itoa(pageSize)}}
+
+		// Set up the URL
+		relativeURL := fmt.Sprintf("v2/aws_account_assignments?%s", params.Encode())
+
+		// Make the API call
 		responseBody, err := getResponsePage(s, relativeURL)
 		if err != nil {
 			return nil, err
 		}
-		var aa = new(AwsAccountAssignments)
-		err = json.Unmarshal(responseBody, &aa)
+
+		// Unmarshal the response data into the AwsAccountAssignments struct
+		err = json.Unmarshal(responseBody, &awsaccountassignments)
 		if err != nil {
 			return nil, err
 		}
-		for _, a := range aa.AwsAccountAssignments {
-			awsaccountassignments.AwsAccountAssignments = append(awsaccountassignments.AwsAccountAssignments, a)
-		}
-		if len(aa.AwsAccountAssignments) < 50 {
+
+		// Check length of array in AwsAccountAssignments' struct to determine if we should break out of the loop
+		if len(awsaccountassignments.AwsAccountAssignments) < pageSize {
 			break
 		}
+
+		// Increment page counter
 		page++
 	}
-	return awsaccountassignments, nil
+	return &awsaccountassignments, nil
 }
 
 // CreateAwsAccountAssignment creates a new AwsAccountAssignment in CloudHealth.
 func (s *Client) CreateAwsAccountAssignment(awsaccountassignment AwsAccountAssignment) (*AwsAccountAssignment, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_account_assignments?api_key=%s", s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v2/aws_account_assignments")
 
+	// Make the API call
 	responseBody, err := createResource(s, relativeURL, awsaccountassignment)
 	if err != nil {
 		return nil, err
 	}
 
-	var returnedAwsAccountAssignment = new(AwsAccountAssignment)
+	// Unmarshal the response data into the AwsAccountAssignment struct
+	var returnedAwsAccountAssignment AwsAccountAssignment
 	err = json.Unmarshal(responseBody, &returnedAwsAccountAssignment)
 	if err != nil {
 		return nil, err
 	}
 
-	return returnedAwsAccountAssignment, nil
+	return &returnedAwsAccountAssignment, nil
 }
 
 // UpdateAwsAccountAssignment updates an existing AwsAccountAssignment in CloudHealth.
 func (s *Client) UpdateAwsAccountAssignment(awsaccountassignment AwsAccountAssignment) (*AwsAccountAssignment, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_account_assignments/%d?api_key=%s", awsaccountassignment.ID, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v2/aws_account_assignments/%d", awsaccountassignment.ID)
 
+	// Make the API call
 	responseBody, err := updateResource(s, relativeURL, awsaccountassignment)
 	if err != nil {
 		return nil, err
 	}
 
-	var returnedAwsAccountAssignment = new(AwsAccountAssignment)
+	// Unmarshal the response data into the AwsAccountAssignment struct
+	var returnedAwsAccountAssignment AwsAccountAssignment
 	err = json.Unmarshal(responseBody, &returnedAwsAccountAssignment)
 	if err != nil {
 		return nil, err
 	}
 
-	return returnedAwsAccountAssignment, nil
+	return &returnedAwsAccountAssignment, nil
 }
 
 // DeleteAwsAccountAssignment removes the AwsAccountAssignment with the specified CloudHealth ID.
 func (s *Client) DeleteAwsAccountAssignment(id int) error {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_account_assignments/%d?api_key=%s", id, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v2/aws_account_assignments/%d", id)
+
+	// Make the API call
 	_, err := deleteResource(s, relativeURL)
 	if err != nil {
 		return err

@@ -39,7 +39,7 @@ func TestGetSingleAwsAccountAssignment(t *testing.T) {
 		if r.Method != "GET" {
 			t.Errorf("Expected ‘GET’ request, got ‘%s’", r.Method)
 		}
-		expectedURL := fmt.Sprintf("/aws_account_assignments/%d", defaultAwsAccountAssignment.ID)
+		expectedURL := fmt.Sprintf("v1/aws_account_assignments/%d", defaultAwsAccountAssignment.ID)
 		if r.URL.EscapedPath() != expectedURL {
 			t.Errorf("Expected request to ‘%s’, got ‘%s’", expectedURL, r.URL.EscapedPath())
 		}

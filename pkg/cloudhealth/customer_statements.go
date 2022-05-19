@@ -35,56 +35,76 @@ type Currency struct {
 
 // GetSingleCustomerStatements gets all statements for a specific Customer ID.
 func (s *Client) GetSingleCustomerStatements(id int) (*BillingArtifacts, error) {
-	var billingArtifacts = new(BillingArtifacts)
-	page := 1
+	// Set variables we will need along the way
+	var billingArtifacts BillingArtifacts
+	var page, pageSize int = 1, 100
+
+	// Loop for paging
 	for {
-		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"100"}, "api_key": {s.APIKey}}
-		relativeURL, _ := url.Parse(fmt.Sprintf("customer_statements/?client_api_id=%d&%s", id, params.Encode()))
+		// Set up the query parameters for the API
+		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {strconv.Itoa(pageSize)}}
+
+		// Set up the URL
+		relativeURL := fmt.Sprintf("v1/customer_statements?client_api_id=%d&%s", id, params.Encode())
+
+		// Make the API call
 		responseBody, err := getResponsePage(s, relativeURL)
 		if err != nil {
 			return nil, err
 		}
-		var ba = new(BillingArtifacts)
-		err = json.Unmarshal(responseBody, &ba)
+
+		// Unmarshal the response data into the BillingArtifacts struct
+		err = json.Unmarshal(responseBody, &billingArtifacts)
 		if err != nil {
 			return nil, err
 		}
-		for _, a := range ba.BillingArtifacts {
-			billingArtifacts.BillingArtifacts = append(billingArtifacts.BillingArtifacts, a)
-		}
-		if len(ba.BillingArtifacts) < 100 {
+
+		// Check length of array in BillingArtifacts' struct to determine if we should break out of the loop
+		if len(billingArtifacts.BillingArtifacts) < pageSize {
 			break
 		}
+
+		// Increment page counter
 		page++
 	}
 
-	return billingArtifacts, nil
+	return &billingArtifacts, nil
 }
 
 // GetCustomerStatements gets all Statements.
 func (s *Client) GetCustomerStatements() (*BillingArtifacts, error) {
-	billingArtifacts := new(BillingArtifacts)
-	page := 1
+	// Set variables we will need along the way
+	var billingArtifacts BillingArtifacts
+	var page, pageSize int = 1, 100
+
+	// Loop for paging
 	for {
-		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"100"}, "api_key": {s.APIKey}}
-		relativeURL, _ := url.Parse(fmt.Sprintf("customer_statements/?%s", params.Encode()))
+		// Set up the query parameters for the API
+		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {strconv.Itoa(pageSize)}}
+
+		// Set up the URL
+		relativeURL := fmt.Sprintf("v1/customer_statements?%s", params.Encode())
+
+		// Make the API call
 		responseBody, err := getResponsePage(s, relativeURL)
 		if err != nil {
 			return nil, err
 		}
-		var ba = new(BillingArtifacts)
-		err = json.Unmarshal(responseBody, &ba)
+
+		// Unmarshal the response data into the BillingArtifacts struct
+		err = json.Unmarshal(responseBody, &billingArtifacts)
 		if err != nil {
 			return nil, err
 		}
-		for _, a := range ba.BillingArtifacts {
-			billingArtifacts.BillingArtifacts = append(billingArtifacts.BillingArtifacts, a)
-		}
-		if len(ba.BillingArtifacts) < 100 {
+
+		// Check length of array in BillingArtifacts' struct to determine if we should break out of the loop
+		if len(billingArtifacts.BillingArtifacts) < pageSize {
 			break
 		}
+
+		// Increment page counter
 		page++
 	}
 
-	return billingArtifacts, nil
+	return &billingArtifacts, nil
 }

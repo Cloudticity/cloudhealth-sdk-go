@@ -40,7 +40,7 @@ type AwsAccountStatus struct {
 type AwsAccountAuthentication struct {
 	Protocol             string `json:"protocol,omitempty"`
 	AccessKey            string `json:"access_key,omitempty"`
-	SecreyKey            string `json:"secret_key,omitempty"`
+	SecretKey            string `json:"secret_key,omitempty"`
 	AssumeRoleArn        string `json:"assume_role_arn,omitempty"`
 	AssumeRoleExternalID string `json:"assume_role_external_id,omitempty"`
 }
@@ -50,95 +50,112 @@ type AwsExternalID struct {
 	ExternalID string `json:"generated_external_id,omitempty"`
 }
 
-// GetAwsAccount gets the AWS Account with the specified CloudHealth Account ID. (deprecated, will be removed in future, kept only to not break anything)
-func (s *Client) GetAwsAccount(id int) (*AwsAccount, error) {
-	return s.GetSingleAwsAccount(id)
-}
-
 // GetSingleAwsAccount gets the AWS Account with the specified CloudHealth Account ID.
 func (s *Client) GetSingleAwsAccount(id int) (*AwsAccount, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", id, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v1/aws_accounts/%d", id)
 
+	// Make the API call
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
 		return nil, err
 	}
 
-	var account = new(AwsAccount)
+	// Unmarshal the response data into the AwsAccount struct
+	var account AwsAccount
 	err = json.Unmarshal(responseBody, &account)
 	if err != nil {
 		return nil, err
 	}
 
-	return account, nil
+	return &account, nil
 }
 
 // GetAwsAccounts gets all AWS Accounts enabled in CloudHealth.
 func (s *Client) GetAwsAccounts() (*AwsAccounts, error) {
-	awsaccounts := new(AwsAccounts)
-	page := 1
+	// Set variables we will need along the way
+	var awsaccounts AwsAccounts
+	var page, pageSize int = 1, 100
+
+	// Loop for paging
 	for {
-		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"100"}, "api_key": {s.APIKey}}
-		relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/?%s", params.Encode()))
+		// Set up the query parameters for the API
+		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {strconv.Itoa(pageSize)}}
+
+		// Set up the URL
+		relativeURL := fmt.Sprintf("v1/aws_accounts?%s", params.Encode())
+
+		// Make the API call
 		responseBody, err := getResponsePage(s, relativeURL)
 		if err != nil {
 			return nil, err
 		}
-		var acts = new(AwsAccounts)
-		err = json.Unmarshal(responseBody, &acts)
+
+		// Unmarshal the response data into the AWSAccounts struct
+		err = json.Unmarshal(responseBody, &awsaccounts)
 		if err != nil {
 			return nil, err
 		}
-		for _, p := range acts.AwsAccounts {
-			awsaccounts.AwsAccounts = append(awsaccounts.AwsAccounts, p)
-		}
-		if len(acts.AwsAccounts) < 100 {
+
+		// Check length of array in AwsAccounts' struct to determine if we should break out of the loop
+		if len(awsaccounts.AwsAccounts) < pageSize {
 			break
 		}
+
+		// Increment page counter
 		page++
 	}
-	return awsaccounts, nil
+	return &awsaccounts, nil
 }
 
 // CreateAwsAccount enables a new AWS Account in CloudHealth.
 func (s *Client) CreateAwsAccount(account AwsAccount) (*AwsAccount, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts?api_key=%s", s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v1/aws_accounts")
 
+	// Make the API call
 	responseBody, err := createResource(s, relativeURL, account)
 	if err != nil {
 		return nil, err
 	}
 
-	var returnedAccount = new(AwsAccount)
+	// Unmarshal the response data into the AwsAccount struct
+	var returnedAccount AwsAccount
 	err = json.Unmarshal(responseBody, &returnedAccount)
 	if err != nil {
 		return nil, err
 	}
 
-	return returnedAccount, nil
+	return &returnedAccount, nil
 }
 
 // UpdateAwsAccount updates an existing AWS Account in CloudHealth.
 func (s *Client) UpdateAwsAccount(account AwsAccount) (*AwsAccount, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", account.ID, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v1/aws_accounts/%d", account.ID)
 
+	// Make the API call
 	responseBody, err := updateResource(s, relativeURL, account)
 	if err != nil {
 		return nil, err
 	}
 
-	var returnedAccount = new(AwsAccount)
+	// Unmarshal the response data into the AwsAccount struct
+	var returnedAccount AwsAccount
 	err = json.Unmarshal(responseBody, &returnedAccount)
 	if err != nil {
 		return nil, err
 	}
 
-	return returnedAccount, nil
+	return &returnedAccount, nil
 }
 
 // DeleteAwsAccount removes the AWS Account with the specified CloudHealth ID.
 func (s *Client) DeleteAwsAccount(id int) error {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d?api_key=%s", id, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("aws_accounts/%d", id)
+
+	// Make the API call
 	_, err := deleteResource(s, relativeURL)
 	if err != nil {
 		return err
@@ -149,17 +166,21 @@ func (s *Client) DeleteAwsAccount(id int) error {
 
 // GetAwsExternalID gets the AWS External ID tied to the CloudHealth Account.
 func (s *Client) GetAwsExternalID(id int) (*AwsExternalID, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("aws_accounts/%d/generate_external_id?api_key=%s", id, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v1/aws_accounts/%d/generate_external_id", id)
+
+	// Make the API call
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
 		return nil, err
 	}
 
-	var extid = new(AwsExternalID)
-	err = json.Unmarshal(responseBody, &extid)
+	// Unmarshal the response data into the AwsExternalId struct
+	var externalId AwsExternalID
+	err = json.Unmarshal(responseBody, &externalId)
 	if err != nil {
 		return nil, err
 	}
 
-	return extid, nil
+	return &externalId, nil
 }

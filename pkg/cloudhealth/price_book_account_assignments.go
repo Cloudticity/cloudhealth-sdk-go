@@ -22,45 +22,58 @@ type AccountPriceBookAssignment struct {
 
 // GetSingleAccountPriceBookAssignment gets the details for the Assignment with specified ID.
 func (s *Client) GetSingleAccountPriceBookAssignment(id int) (*AccountPriceBookAssignment, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("price_book_account_assignments/%d?api_key=%s", id, s.APIKey))
+	// Set up the URL
+	relativeURL := fmt.Sprintf("v1/price_book_account_assignments/%d", id)
 
+	// Make the API call
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
 		return nil, err
 	}
 
-	var accountPriceBookAssignment = new(AccountPriceBookAssignment)
+	// Unmarshal the response data into the AccountPriceBookAssignment struct
+	var accountPriceBookAssignment AccountPriceBookAssignment
 	err = json.Unmarshal(responseBody, &accountPriceBookAssignment)
 	if err != nil {
 		return nil, err
 	}
 
-	return accountPriceBookAssignment, nil
+	return &accountPriceBookAssignment, nil
 }
 
 // GetAccountPriceBookAssignments gets all Assignments.
 func (s *Client) GetAccountPriceBookAssignments() (*AccountPriceBookAssignments, error) {
-	accountPriceBookAssignments := new(AccountPriceBookAssignments)
-	page := 1
+	// Set variables we will need along the way
+	var accountPriceBookAssignments AccountPriceBookAssignments
+	var page, pageSize int = 1, 50
+
+	// Loop for paging
 	for {
-		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"50"}, "api_key": {s.APIKey}}
-		relativeURL, _ := url.Parse(fmt.Sprintf("price_book_account_assignments/?%s", params.Encode()))
+		// Set up the query parameters for the API
+		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {strconv.Itoa(pageSize)}}
+
+		// Set up the URL
+		relativeURL := fmt.Sprintf("v1/price_book_account_assignments?%s", params.Encode())
+
+		// Make the API call
 		responseBody, err := getResponsePage(s, relativeURL)
 		if err != nil {
 			return nil, err
 		}
-		var ac = new(AccountPriceBookAssignments)
-		err = json.Unmarshal(responseBody, &ac)
+
+		// Unmarshal the response data into the AccountPriceBookAssignments struct
+		err = json.Unmarshal(responseBody, &accountPriceBookAssignments)
 		if err != nil {
 			return nil, err
 		}
-		for _, a := range ac.AccountPriceBookAssignments {
-			accountPriceBookAssignments.AccountPriceBookAssignments = append(accountPriceBookAssignments.AccountPriceBookAssignments, a)
-		}
-		if len(ac.AccountPriceBookAssignments) < 50 {
+
+		// Check length of array in AccountPriceBookAssignments' struct to determine if we should break out of the loop
+		if len(accountPriceBookAssignments.AccountPriceBookAssignments) < pageSize {
 			break
 		}
+
+		// Increment page counter
 		page++
 	}
-	return accountPriceBookAssignments, nil
+	return &accountPriceBookAssignments, nil
 }

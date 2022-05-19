@@ -24,7 +24,7 @@ type CustomerPriceBookAssignment struct {
 
 // GetSingleCustomerPriceBookAssignment gets the details for the Assignment with specified ID.
 func (s *Client) GetSingleCustomerPriceBookAssignment(id int) (*CustomerPriceBookAssignment, error) {
-	relativeURL, _ := url.Parse(fmt.Sprintf("price_book_assignments/%d?api_key=%s", id, s.APIKey))
+	relativeURL := fmt.Sprintf("price_book_assignments/%d?api_key=%s", id, s.APIKey)
 
 	responseBody, err := getResponsePage(s, relativeURL)
 	if err != nil {
@@ -46,7 +46,7 @@ func (s *Client) GetCustomerPriceBookAssignments() (*CustomerPriceBookAssignment
 	page := 1
 	for {
 		params := url.Values{"page": {strconv.Itoa(page)}, "per_page": {"50"}, "api_key": {s.APIKey}}
-		relativeURL, _ := url.Parse(fmt.Sprintf("price_book_assignments/?%s", params.Encode()))
+		relativeURL := fmt.Sprintf("price_book_assignments/?%s", params.Encode())
 		responseBody, err := getResponsePage(s, relativeURL)
 		if err != nil {
 			return nil, err
@@ -69,7 +69,7 @@ func (s *Client) GetCustomerPriceBookAssignments() (*CustomerPriceBookAssignment
 
 // DeleteCustomerPriceBookAssignment removes the Customer Price Book Assignment with the specified CloudHealth ID.
 func (s *Client) DeleteCustomerPriceBookAssignment(id int) error {
-	relativeURL, _ := url.Parse(fmt.Sprintf("price_book_assignments/%d?api_key=%s", id, s.APIKey))
+	relativeURL := fmt.Sprintf("price_book_assignments/%d?api_key=%s", id, s.APIKey)
 	_, err := deleteResource(s, relativeURL)
 	if err != nil {
 		return err
